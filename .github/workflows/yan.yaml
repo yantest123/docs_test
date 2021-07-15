@@ -1,0 +1,48 @@
+name: Publish to my blog
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install and build
+      run: |
+	    cd linux
+        npm install && npm install hexo-cli -g
+        hexo clean && hexo generate
+        cp -ravx pubilc ../public/linux
+        cd ../android
+        npm install && npm install hexo-cli -g
+        hexo clean && hexo generate
+        cp -ravx pubilc ../public/android
+        cd ../krescue
+        npm install && npm install hexo-cli -g
+        hexo clean && hexo generate
+        cp -ravx pubilc ../public/krescue
+    - name: Commit files
+      run: |
+        cd pubilc
+        git init
+        git config --local user.name "Yan"
+        git config --local user.email "yan-wyb@foxmail.com"
+        git add .
+        git commit -m "hexo build at $(date)"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        directory: ./pubilc
+        repository: yantest123/yantest123.github.io
+        branch: master
+        github_token: ${{ secrets.ACCESS_TOKEN }}
+        force: true
