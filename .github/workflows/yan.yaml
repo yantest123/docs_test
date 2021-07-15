@@ -41,7 +41,7 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-        directory: ./pubilc
+        directory: ./public
         repository: yantest123/yantest123.github.io
         branch: master
         github_token: ${{ secrets.ACCESS_TOKEN }}
