@@ -32,7 +32,7 @@ jobs:
         cp -ravx public ../public/krescue
     - name: Commit files
       run: |
-        cd pubilc
+        cd public
         git init
         git config --local user.name "Yan"
         git config --local user.email "yan-wyb@foxmail.com"
